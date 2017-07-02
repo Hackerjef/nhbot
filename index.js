@@ -6,12 +6,13 @@ const fs = require("fs");
 const Authjson = require("./config/auth-config.json");
 //Get Config data
 const configjson = require("./config/config.json");
-
+//sourcebans data
+const sbdata = require("./config/sourcebans.json");
 
 //debug
 client.on("error", (e) => console.error(e));
 client.on("warn", (e) => console.warn(e));
-//client.on("debug", (e) => console.info(e));
+client.on("debug", (e) => console.info(e));
 
 // This loop reads the /events/ folder and attaches each event file to the appropriate event.
 fs.readdir("./events/", (err, files) => {
@@ -24,7 +25,7 @@ fs.readdir("./events/", (err, files) => {
   });
 });
 
-
+//player commands
 client.on("message", (message) => {
   // Set the prefix
   let prefix = configjson.prefix;
@@ -35,16 +36,41 @@ client.on("message", (message) => {
   // if bot is the sender (Botception)
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
+
   const args = message.content.split(" ");
   const command = args.shift().slice(configjson.prefix.length);
-
   try {
-    let commandFile = require(`./commands/${command}.js`);
-    commandFile.run(client, message, args, configjson, Authjson);
+    let commandFile = require(`./commands/Playercommands/${command}.js`);
+    commandFile.run(client, message, args, configjson, Authjson, sbdata);
   } catch (err) {
     //console.log(err);
     message.reply("Command not Found");
   }
 });
+
+//client.on("message", (message) => {
+  // Set the prefix
+//  let prefix = configjson.prefix;
+
+  // Exit and stop if it's not there
+//  if (!message.content.startsWith(prefix)) return;
+
+  // if bot is the sender (Botception)
+//  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+
+//  const args = message.content.split(" ");
+//  const command = args.shift().slice(configjson.prefix.length);
+//  try {
+//    let commandFile = require(`./commands/Admincommands/${command}.js`);
+//    commandFile.run(client, message, args, configjson, Authjson, sbdata);
+//  } catch (err) {
+    //console.log(err);
+//    message.reply("Command not Found");
+//  }
+//});
+
+
+
 
 client.login(Authjson.Token);
