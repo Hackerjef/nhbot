@@ -6,8 +6,9 @@ const fs = require("fs");
 const Authjson = require("./config/auth-config.json");
 //Get Config data
 const configjson = require("./config/config.json");
-//sourcebans data
-const sbdata = require("./config/sourcebans.json");
+//Get perm data
+const perms  = require("./config/staff.json");
+
 
 //debug
 client.on("error", (e) => console.error(e));
@@ -25,7 +26,11 @@ fs.readdir("./events/", (err, files) => {
   });
 });
 
-//player commands
+
+
+
+
+//commands
 client.on("message", (message) => {
   // Set the prefix
   let prefix = configjson.prefix;
@@ -36,41 +41,20 @@ client.on("message", (message) => {
   // if bot is the sender (Botception)
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
+  let adminRole = message.guild.roles.find("name", perms.Admingroup);
+  let modRole = message.guild.roles.find("name", perms.modgroup);
+  let userrole = "norole";
+  if (message.member.roles.has(modRole.id)) let userrole = "modrole";
+  if (message.member.roles.has(adminRole.id)) let userrole = "adminrole";
 
   const args = message.content.split(" ");
   const command = args.shift().slice(configjson.prefix.length);
   try {
-    let commandFile = require(`./commands/Playercommands/${command}.js`);
-    commandFile.run(client, message, args, configjson, Authjson, sbdata);
+    let commandFile = require(`./commands/${command}.js`);
+    commandFile.run(client, message, args, configjson, userrole);
   } catch (err) {
-    //console.log(err);
+    //console.warn(err);
     message.reply("Command not Found");
   }
 });
-
-//client.on("message", (message) => {
-  // Set the prefix
-//  let prefix = configjson.prefix;
-
-  // Exit and stop if it's not there
-//  if (!message.content.startsWith(prefix)) return;
-
-  // if bot is the sender (Botception)
-//  if (!message.content.startsWith(prefix) || message.author.bot) return;
-
-
-//  const args = message.content.split(" ");
-//  const command = args.shift().slice(configjson.prefix.length);
-//  try {
-//    let commandFile = require(`./commands/Admincommands/${command}.js`);
-//    commandFile.run(client, message, args, configjson, Authjson, sbdata);
-//  } catch (err) {
-    //console.log(err);
-//    message.reply("Command not Found");
-//  }
-//});
-
-
-
-
 client.login(Authjson.Token);
