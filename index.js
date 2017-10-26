@@ -2,13 +2,15 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const fs = require("fs");
 
-//Get Auth data
-var Authjson = JSON.parse(fs.readFileSync("./config/auth-config.json", "utf8"));
-//Get Config data
-var configjson = JSON.parse(fs.readFileSync("./config/config.json", "utf8"));
-//Get perm data
-var permsjson = JSON.parse(fs.readFileSync("./config/staff.json", "utf8"));
-
+// if configs are good, get data.
+// check.run(typeofencoding, name, file direcory, typeofconfig);
+let check = require("./nodeEvents/check.js");
+//auth
+check.auth("utf8", "Authjson", "./config/auth-config.json", "auth");
+//config
+check.config("utf8", "configjson", "./config/config.json", "main");
+//perm
+check.perms("utf8", "permsjson", "./config/perms.json", "perm");
 
 //debug
 client.on("error", (e) => console.error(e));
@@ -37,11 +39,24 @@ client.on("message", (message) => {
   // if bot is the sender (Botception)
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-  const adminRole = message.guild.roles.find("name", permsjson.Admingroup);
-  const modRole = message.guild.roles.find("name", permsjson.modgroup);
+  // set def group (w/o role)
   let userrole = "norole";
-  if (message.member.roles.has(modRole.id).catch(console.warn)) userrole = "modrole";
+
+  // if disabled set usr role as disabled and stops permmision system from continuing.
+  if (permsjson.perms == "disabled") userrole = "disabled" break nopermgroups;
+
+  // get id of admin role (if set up), if not disable admin group and skip to config modrole.
+  const adminRole = message.guild.roles.find("name", permsjson.Admingroup);
+  if (adminRole.id == "null") console.error("admin group not found, admin commands disabled") break noadmingroup;
   if (message.member.roles.has(adminRole.id).catch(console.warn)) userrole = "adminrole";
+  continue noadmingroup;
+
+  // get id of mod role (if set up), if not disable mod group and skip to end of perm codeblock.
+  const modRole = message.guild.roles.find("name", permsjson.modgroup);
+  if (modRole.id == "null") console.error("mod group not found, mod commands disabled") break nomodgroup;
+  if (message.member.roles.has(modRole.id).catch(console.warn)) userrole = "modrole";
+  continue nomodgroup;
+  continue nopermgroups;
 
   const args = message.content.split(" ");
   const command = args.shift().slice(configjson.prefix.length);
@@ -53,4 +68,5 @@ client.on("message", (message) => {
     message.reply("Command not Found").catch(console.info);
   }
 });
+//use token to
 client.login(Authjson.Token);
