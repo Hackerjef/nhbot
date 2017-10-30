@@ -6,9 +6,9 @@ const fs = require("fs");
 //auth
 const Authjson = require("./config/auth-config.json", "utf8");
 //config
-const configjson = require("./config/auth-config.json", "utf8");
+const configjson = require("./config/config.json", "utf8");
 //perm
-const permsjson = require("./config/auth-config.json", "utf8");
+const permsjson = require("./config/perms.json", "utf8");
 
 //debug
 client.on("error", (e) => console.error(e));
@@ -49,14 +49,12 @@ client.on("message", (message) => {
   //set mod role const
   const modRole = message.guild.roles.find("name", permsjson.modgroup);
 
-  //set userrole to "sometypeofadmininstrator" if they have one of the roles
-  if ((message.member.roles.has(adminRole.id)) || (message.member.roles.has(modRole.id)) || (!permsjson.perms == "disabled")) {
-    userrole = "sometypeofadmininstrator";
-  }
-  //set if mod or admin
-  if (!permsjson.perms == "disabled" || userrole == "sometypeofadmininstrator") {
-    if (message.member.roles.has(modRole.id)) userrole = "modrole";
-    if (message.member.roles.has(adminRole.id)) userrole = "adminrole";
+  //set userrole to role if admin has role
+  if ((!permsjson.perms == "disabled") || (!modRole == "null") || (!adminRole == "null")) {
+    if (message.member.roles.has(adminRole.id) || (message.member.roles.has(modRole.id))) {
+      if (message.member.roles.has(modRole.id)) userrole = "modrole";
+      if (message.member.roles.has(adminRole.id)) userrole = "adminrole";
+    }
   }
   const args = message.content.split(" ");
   const command = args.shift().slice(configjson.prefix.length);
