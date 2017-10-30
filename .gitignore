@@ -49,4 +49,4 @@ jspm_packages
 # configs
 auth-config.json
 config.json
-staff.json
+perms.json
