@@ -46,6 +46,7 @@ client.on("message", (message) => {
 
   //set admin role const
   const adminRole = message.guild.roles.find("name", permsjson.Admingroup);
+
   //set mod role const
   const modRole = message.guild.roles.find("name", permsjson.modgroup);
 
