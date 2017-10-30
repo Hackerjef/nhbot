@@ -26,6 +26,13 @@ fs.readdir("./events/", (err, files) => {
   });
 });
 
+// if disabled set usr role as disabled and stops permmision system from continuing.
+let userrole = "norole";
+if (permsjson.perms == "disabled") {
+  userrole = "disabled";
+  console.log("Note: Perm settings are disabled, no admin/mod commands will work");
+}
+
 //commands
 client.on("message", (message) => {
   // Set the prefix
@@ -37,27 +44,20 @@ client.on("message", (message) => {
   // if bot is the sender (Botception)
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-  // set def group (w/o role)
-  let userrole = "norole";
-
-  // if disabled set usr role as disabled and stops permmision system from continuing.
-  if (permsjson.perms == "disabled") userrole = "disabled";
-  if (permsjson.perms == "disabled") break nopermgroups;
-  // get id of admin role (if set up), if not disable admin group and skip to config modrole.
+  //set admin role const
   const adminRole = message.guild.roles.find("name", permsjson.Admingroup);
-  if (adminRole.id == "null") console.error("admin group not found, admin commands disabled");
-  if (adminRole.id == "null") break noadmingroup:
-  if (message.member.roles.has(adminRole.id).catch(console.warn)) userrole = "adminrole";
-  continue noadmingroup:
-
-  // get id of mod role (if set up), if not disable mod group and skip to end of perm codeblock.
+  //set mod role const
   const modRole = message.guild.roles.find("name", permsjson.modgroup);
-  if (modRole.id == "null") console.error("mod group not found, mod commands disabled")
-  if (modRole.id == "null") break nomodgroup;
-  if (message.member.roles.has(modRole.id).catch(console.warn)) userrole = "modrole";
-  continue nomodgroup:
-  continue nopermgroups:
 
+  //set userrole to "sometypeofadmininstrator" if they have one of the roles
+  if ((message.member.roles.has(adminRole.id)) || (message.member.roles.has(modRole.id)) || (!permsjson.perms == "disabled")) {
+    userrole = "sometypeofadmininstrator";
+  }
+  //set if mod or admin
+  if (!permsjson.perms == "disabled" || userrole == "sometypeofadmininstrator") {
+    if (message.member.roles.has(modRole.id)) userrole = "modrole";
+    if (message.member.roles.has(adminRole.id)) userrole = "adminrole";
+  }
   const args = message.content.split(" ");
   const command = args.shift().slice(configjson.prefix.length);
   try {
