@@ -13,8 +13,9 @@ const permsjson = require("./config/perms.json", "utf8");
 
 //debug
 client.on("error", (e) => console.error(e));
-client.on("warn", (e) => console.warn(e));
-client.on("debug", (e) => console.info(e));
+if (configjson.debug == "true") console.log("!Debuging enabled!");
+if (configjson.debug == "true") client.on("warn", (e) => console.warn(e));
+if (configjson.debug == "true") client.on("debug", (e) => console.info(e));
 
 // This loop reads the /events/ folder and attaches each event file to the appropriate event.
 fs.readdir("./events/", (err, files) => {
@@ -36,6 +37,7 @@ if (permsjson.perms == "disabled") {
 
 //commands
 client.on("message", (message) => {
+
   // Set the prefix
   let prefix = configjson.prefix;
 

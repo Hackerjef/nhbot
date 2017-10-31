@@ -4,7 +4,7 @@
   "description": "stuff",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test for application\" && exit 1"
+    "test": "echo \"Error: no test for applicationn\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -17,8 +17,14 @@
   },
   "homepage": "https://github.com/Hackerjef/nhbot#readme",
   "dependencies": {
-    "bufferutil": "^3.0.1",
+    "bufferutil": "^3.0.2",
     "discord.js": "^11.1.0",
-    "is-valid-json": "^1.0.2"
+    "erlpack": "github:discordapp/erlpack",
+    "ffmpeg-binaries": "^3.2.2",
+    "is-valid-json": "^1.0.2",
+    "node-opus": "^0.2.7",
+    "sodium": "^2.0.1",
+    "uws": "^8.14.1",
+    "zlib-sync": "^0.1.3"
   }
 }
