@@ -13,6 +13,7 @@ const permsjson = require("./config/perms.json", "utf8");
 
 //debug
 client.on("error", (e) => console.error(e));
+//enable debug if enabled
 if (configjson.debug == "true") console.log("!Debuging enabled!");
 if (configjson.debug == "true") client.on("warn", (e) => console.warn(e));
 if (configjson.debug == "true") client.on("debug", (e) => console.info(e));
@@ -53,22 +54,18 @@ client.on("message", (message) => {
   //set mod role const
   const modRole = message.guild.roles.find("name", permsjson.modgroup);
 
-  //set userrole to role if admin has role
-  //if ((!permsjson.perms == "disabled") || (modRole !== "null") || (adminRole !== "null")) {
-  //  if (message.member.roles.has(adminRole.id) || (message.member.roles.has(modRole.id))) {
-  //    if (message.member.roles.has(modRole.id)) userrole = "modrole";
-  //    if (message.member.roles.has(adminRole.id)) userrole = "adminrole";
-  //  }
-  //}
+  //set userrole to role of user if user has both roles, the admin role is top.
   if (permsjson.perms == "enabled") {
-    if( isJSON(adminRole) ){
-      if (message.member.roles.has(adminRole.id)) userrole = "adminrole";
-
-    }
+    // check if mod role is valid(so the bot doesnt crash if it doesnt exist)
     if( isJSON(modRole) ){
       if (message.member.roles.has(modRole.id)) userrole = "modrole";
     }
+    // check if admin role is valid(so the bot doesnt crash if it doesnt exist)
+    if( isJSON(adminRole) ){
+      if (message.member.roles.has(adminRole.id)) userrole = "adminrole";
+    }
   }
+
   const args = message.content.split(" ");
   const command = args.shift().slice(configjson.prefix.length);
   try {
@@ -80,5 +77,5 @@ client.on("message", (message) => {
   }
   userrole = "norole";
 });
-//use token to
+//use token to  start bot
 client.login(Authjson.Token);
