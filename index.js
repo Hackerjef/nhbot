@@ -1,3 +1,13 @@
+//check for updates
+const updater = require("./src/update.js");
+let path = __dirname;
+if( updater.check(path) ){
+  //if true update
+  updater.run(path);
+  process.exit(1);
+}
+
+//bot start
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const fs = require("fs");
@@ -11,18 +21,20 @@ const configjson = require("./config/config.json", "utf8");
 //perm
 const permsjson = require("./config/perms.json", "utf8");
 
+
 //debug
 client.on("error", (e) => console.error(e));
 //enable debug if enabled
-if (configjson.debug == "true") console.log("!Debuging enabled!");
-if (configjson.debug == "true") client.on("warn", (e) => console.warn(e));
-if (configjson.debug == "true") client.on("debug", (e) => console.info(e));
-
+if (configjson.debug == "true") {
+  console.log("!Debuging enabled!");
+  client.on("warn", (e) => console.warn(e));
+  client.on("debug", (e) => console.info(e));
+}
 // This loop reads the /events/ folder and attaches each event file to the appropriate event.
 fs.readdir("./events/", (err, files) => {
   if (err) return console.error(err);
   files.forEach(file => {
-    let eventFunction = require(`./events/${file}`);
+    let eventFunction = require(`./src/events/${file}`);
     let eventName = file.split(".")[0];
     // super-secret recipe to call events with all their proper arguments *after* the `client` var.
     client.on(eventName, (...args) => eventFunction.run(client, configjson, Authjson, ...args));
@@ -38,7 +50,6 @@ if (permsjson.perms == "disabled") {
 
 //commands
 client.on("message", (message) => {
-
   // Set the prefix
   let prefix = configjson.prefix;
 
@@ -65,11 +76,10 @@ client.on("message", (message) => {
       if (message.member.roles.has(adminRole.id)) userrole = "adminrole";
     }
   }
-
   const args = message.content.split(" ");
   const command = args.shift().slice(configjson.prefix.length);
   try {
-    let commandFile = require(`./commands/${command}.js`);
+    let commandFile = require(`./src/commands/${command}.js`);
     commandFile.run(client, message, Authjson, configjson, userrole, args);
   } catch (err) {
     //console.warn(err);

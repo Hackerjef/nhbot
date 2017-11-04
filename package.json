@@ -17,12 +17,13 @@
   },
   "homepage": "https://github.com/Hackerjef/nhbot#readme",
   "dependencies": {
-    "bufferutil": "^3.0.2",
+    "bufferutil": "^3.0.3",
     "discord.js": "^11.1.0",
     "erlpack": "github:discordapp/erlpack",
     "ffmpeg-binaries": "^3.2.2",
     "is-valid-json": "^1.0.2",
     "node-opus": "^0.2.7",
+    "reptf": "^1.0.1",
     "sodium": "^2.0.1",
     "uws": "^8.14.1",
     "zlib-sync": "^0.1.3"
