@@ -23,9 +23,7 @@
     "ffmpeg-binaries": "^3.2.2",
     "is-valid-json": "^1.0.2",
     "node-opus": "^0.2.7",
-    "reptf": "^1.0.1",
-    "sodium": "^2.0.1",
-    "uws": "^8.14.1",
+    "libsodium-wrappers": "^0.7.2",
     "zlib-sync": "^0.1.3"
   }
 }
