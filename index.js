@@ -15,6 +15,10 @@ const Authjson = require("./config/auth-config.json", "utf8");
 const configjson = require("./config/config.json", "utf8");
 //perm
 const permsjson = require("./config/perms.json", "utf8");
+//show where plugin configs are
+const pluginconfigs = "./configs/pluginconfigs";
+//show where fuctions are
+const functions = "./src/Functions/";
 
 
 //debug
@@ -25,6 +29,7 @@ if (configjson.debug == "true") {
   client.on("warn", (e) => console.warn(e));
   client.on("debug", (e) => console.info(e));
 }
+
 // This loop reads the /events/ folder and attaches each event file to the appropriate event.
 fs.readdir("./events/", (err, files) => {
   if (err) return console.error(err);
@@ -75,7 +80,7 @@ client.on("message", (message) => {
   const command = args.shift().slice(configjson.prefix.length);
   try {
     let commandFile = require(`./src/commands/${command}.js`);
-    commandFile.run(client, message, Authjson, configjson, userrole, args);
+    commandFile.run(client, message, Authjson, configjson, userrole, pluginconfigs, functions, args);
   } catch (err) {
     //console.warn(err);
     message.reply("Command not Found").catch(console.info);
