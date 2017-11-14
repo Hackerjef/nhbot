@@ -1,11 +1,6 @@
 //check for updates
-const updater = require("./src/update.js");
-let path = __dirname;
-if( updater.check(path) ){
-  //if true update
-  updater.run(path);
-  process.exit(1);
-}
+const updater = require("./src/functions/update.js");
+updater.check();
 
 //bot start
 const Discord = require("discord.js");

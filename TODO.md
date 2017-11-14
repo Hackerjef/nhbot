@@ -1,5 +1,4 @@
-+ add event to shutdown for bot
-+ get rep.tf intergration for steam ids,
-+ figure out way to get ban info without mysql
-+ setup owner role stuff
-+ music bot?
++finnish perm stuff for current commands
++finnish steam command/function
++work on update system
++cleanup layout
