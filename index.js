@@ -1,6 +1,14 @@
 //check for updates
 const updater = require("./src/functions/update.js");
-updater.check();
+const updaterconfig = require("./config/updater.json", "utf8");
+if ( updaterconfig.enabled ) {
+  let path = __dirname;
+  if ( updater.check(path) ) {
+    console.log("UPDATE AVALABLE!");
+    if ( updaterconfig.startupautoupdate ) updater.Doupdate(path);
+    if ( updaterconfig.startupasktoupdate ) updater.ask();
+  }
+}
 
 //bot start
 const Discord = require("discord.js");

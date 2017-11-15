@@ -51,3 +51,4 @@ package-lock.json
 auth-config.json
 config.json
 perms.json
+updater.json

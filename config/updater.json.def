@@ -1,0 +1,5 @@
+{
+  "enabled": "True",
+  "startupasktoupdate": "false",
+  "startupautoupdate": "false"
+}

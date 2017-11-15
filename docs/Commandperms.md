@@ -1,16 +1,16 @@
 players:
-
-
+getrole
+ping
 
 
 mods:
-getrole
+
 
 
 
 
 admins:
-
+reload
 
 
 
