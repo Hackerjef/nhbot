@@ -1,12 +1,12 @@
 //check for updates
 const updater = require("./src/functions/update.js");
 const updaterconfig = require("./config/updater.json", "utf8");
-if ( updaterconfig.enabled ) {
+if (updaterconfig.enabled == "True") {
   let path = __dirname;
-  if ( updater.check(path) ) {
+  if (updater.check(path)) {
     console.log("UPDATE AVALABLE!");
-    if ( updaterconfig.startupautoupdate ) updater.Doupdate(path);
-    if ( updaterconfig.startupasktoupdate ) updater.ask();
+    if (updaterconfig.startupautoupdate == "true") updater.Doupdate(path);
+    if (updaterconfig.startupasktoupdate == "true") updater.ask();
   }
 }
 
