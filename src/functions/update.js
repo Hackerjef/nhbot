@@ -1,7 +1,5 @@
 exports.check = (path) => {
-  let simplegitpath = path;
-  require("simple-git")(simplegitpath).fetch("remote");
-  require("simple-git")(simplegitpath).fetch("remote");
+  require("child_process").exec("git remote update")
   var git = require("git-utils");
   //get ahead or behild count
   let repo = git.open(path);
