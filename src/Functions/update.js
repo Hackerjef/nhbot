@@ -1,11 +1,10 @@
 exports.check = (path) => {
-  require('simple-git')(path).fetch("remote");
+  require("simple-git")(path).fetch("remote");
   var git = require("git-utils");
   //get ahead or behild count
-  let repo = git.open(path)
+  let repo = git.open(path);
   let gitdata = repo.getAheadBehindCount("master");
-  console.log(gitdata)
-  if (gitdata.behind >=1) {
+  if (gitdata.behind >=0) {
     console.log("1")
     return true;
   } else {
