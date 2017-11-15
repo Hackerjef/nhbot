@@ -1,5 +1,7 @@
 exports.check = (path) => {
-  require("simple-git")(path).fetch("remote").exec(console.log("checking for updates!"));
+  let simplegitpath = path;
+  require("simple-git")(simplegitpath).fetch("remote");
+  require("simple-git")(simplegitpath).fetch("remote");
   var git = require("git-utils");
   //get ahead or behild count
   let repo = git.open(path);
@@ -13,9 +15,11 @@ exports.check = (path) => {
 
 exports.ask = () => {
   console.log("not implmented yet");
+  return;
 };
 
 
-exports.Doupdate = () => {
+exports.Doupdate = (path) => {
   console.log("not implmented yet");
+
 };

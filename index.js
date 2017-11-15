@@ -26,7 +26,7 @@ const permsjson = require("./config/perms.json", "utf8");
 //show where plugin configs are
 const pluginconfigs = "./configs/pluginconfigs";
 //show where fuctions are
-const functions = "./src/Functions/";
+const functions = "./src/functions/";
 
 
 //debug
