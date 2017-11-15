@@ -31,7 +31,7 @@ if (configjson.debug == "true") {
 }
 
 // This loop reads the /events/ folder and attaches each event file to the appropriate event.
-fs.readdir("./events/", (err, files) => {
+fs.readdir("./src/events/", (err, files) => {
   if (err) return console.error(err);
   files.forEach(file => {
     let eventFunction = require(`./src/events/${file}`);
@@ -42,9 +42,9 @@ fs.readdir("./events/", (err, files) => {
 });
 
 // if disabled set usr role as disabled and stops permmision system from continuing.
-let userrole = "norole";
+let userrole = "2";
 if (permsjson.perms == "disabled") {
-  userrole = "disabled";
+  userrole = "1";
   console.log("Note: Perm settings are disabled, no admin/mod commands will work");
 }
 
@@ -69,13 +69,19 @@ client.on("message", (message) => {
   if (permsjson.perms == "enabled") {
     // check if mod role is valid(so the bot doesnt crash if it doesnt exist)
     if( isJSON(modRole) ){
-      if (message.member.roles.has(modRole.id)) userrole = "modrole";
+      if (message.member.roles.has(modRole.id)) userrole = "3";
     }
     // check if admin role is valid(so the bot doesnt crash if it doesnt exist)
     if( isJSON(adminRole) ){
-      if (message.member.roles.has(adminRole.id)) userrole = "adminrole";
+      if (message.member.roles.has(adminRole.id)) userrole = "4";
     }
   }
+
+  //check if command was made by bot owner
+  if (message.author.id == permsjson.botowner) {
+    userrole = "5";
+  }
+
   const args = message.content.split(" ");
   const command = args.shift().slice(configjson.prefix.length);
   try {
