@@ -5,7 +5,7 @@ exports.check = (path) => {
   let repo = git.open(path)
   let gitdata = repo.getAheadBehindCount("master");
   console.log(gitdata)
-  if (gitdata.behind >=0) {
+  if (gitdata.behind >=1) {
     console.log("1")
     return true;
   } else {
