@@ -1,14 +1,5 @@
-exports.check = (path) => {
-  require("child_process").exec("git remote update")
-  var git = require("git-utils");
-  //get ahead or behild count
-  let repo = git.open(path);
-  let gitdata = repo.getAheadBehindCount("master");
-  if (gitdata.behind >=1) {
-    return true;
-  } else {
-    return false;
-  }
+exports.check = (path, updaterconfig) => {
+  //scrap this IT DIDENT WORK
 };
 
 exports.ask = () => {
@@ -17,7 +8,7 @@ exports.ask = () => {
 };
 
 
-exports.Doupdate = (path) => {
+exports.Doupdate = () => {
   console.log("not implmented yet");
 
 };

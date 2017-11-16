@@ -3,8 +3,7 @@ const updater = require("./src/functions/update.js");
 const updaterconfig = require("./config/updater.json", "utf8");
 if (updaterconfig.enabled == "True") {
   let path = __dirname;
-  if (updater.check(path)) {
-    console.log("UPDATE AVALABLE!");
+  if (updater.check(path, updaterconfig)) {
     if (updaterconfig.startupautoupdate == "true") updater.Doupdate(path);
     if (updaterconfig.startupasktoupdate == "true") updater.ask();
   }

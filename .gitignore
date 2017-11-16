@@ -52,3 +52,6 @@ auth-config.json
 config.json
 perms.json
 updater.json
+
+# temp folder
+src/temp
