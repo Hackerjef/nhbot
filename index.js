@@ -1,41 +1,61 @@
-var readlineSync = require('readline-sync');
-var updaterconfig = require("./config/updater.json", "utf8");
-var fork = require('child_process').fork;
-var child = fork('./bot.js');
-
+const { fork } = require("child_process");
+// arguments
 var program = require("commander");
 program
   .option("-u, --update", "Update application w/o starting")
-  .option("-s, --start", "start bot")
   .option("-su, --startupdate", "update then start bot")
   .parse(process.argv);
 
-if (program.update) update();
-if (program.start) start();
-if (program.startupdate) startupdate();
+// cli
+const vorpal = require("vorpal")();
+vorpal.localStorage("storage");
+
+vorpal
+  .delimiter("$")
+  .show();
+
+//commands
+vorpal
+  .command("start", "starts bot.")
+  .action(function(args, callback) {
+    this.log("!starting bot!");
+    start();
+    callback();
+  });
+
+vorpal
+  .command("stop", "stops bot.")
+  .action(function(args, callback) {
+    this.log("!Stoping bot!");
+    stop();
+    callback();
+  });
+
+if (program.update)vorpal.log("not ready yet");
+if (program.startupdate)vorpal.log("not ready yet");
+
+const forked = fork("bot.js");
+vorpal.localStorage.setItem("botstart", "1");
+vorpal.pipe(forked.stdout);
+vorpal.pipe(forked.stderr);
+forked.on("message", (msg) => {
+  vorpal.log("Bot:", msg);
+});
 
 
-start();
-
-function startupdate() {
-  update();
-  start();
-}
-
-function update() {
-
-}
-
+// functions
 function start() {
-
-  readlineSync.promptLoop(function(input) {
-    sendcommand(input);
-    return input === "shutdown";
+  if (vorpal.localStorage.getItem("botstart") == "1") vorpal.log("Bot already started");
+  if (vorpal.localStorage.getItem("botstart") == "1") return;
+  const forked = fork("bot.js");
+  vorpal.pipe(forked.stdout);
+  vorpal.pipe(forked.stderr);
+  forked.on("message", (msg) => {
+    vorpal.log("Bot:", msg);
   });
 }
-sendcommand("shutdown");
 
-function sendcommand(input) {
-  //send command to rest api (bot)
-  console.log(input);
+function stop() {
+  forked.kill("SIGINT");
+  vorpal.localStorage.setItem("botstart", "0");
 }
