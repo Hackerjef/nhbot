@@ -1,3 +1,12 @@
+const simpleGit = require('simple-git')(__dirname);
+// update checker
+var updateconfig  = require("./config/updater.json")
+
+
+// clear screem for menu
+var clear = require("clear");
+clear();
+
 const { fork } = require("child_process");
 // arguments
 var program = require("commander");
@@ -31,8 +40,32 @@ vorpal
     callback();
   });
 
+vorpal
+  .command("clear", "Clears chat")
+  .action(function(args, callback) {
+    clear();
+    this.log("Cleared Chat");
+    callback();
+  });
+
+vorpal
+  .command("update <subcommand>", "check for updates/installs updates")
+  .action(function(args, callback) {
+    if (args === "check") {
+      updatecheck();
+    } else if (args === "update") {
+      update();
+    } else {
+      vorpal.log("need to add sub command");
+    }
+    callback();
+  });
+
+
+
 if (program.update)vorpal.log("not ready yet");
 if (program.startupdate)vorpal.log("not ready yet");
+
 
 const forked = fork("bot.js");
 vorpal.localStorage.setItem("botstart", "1");
@@ -58,4 +91,13 @@ function start() {
 function stop() {
   forked.kill("SIGINT");
   vorpal.localStorage.setItem("botstart", "0");
+}
+
+function update() {
+
+}
+
+function updatecheck() {
+  simpleGit.fetch();
+
 }

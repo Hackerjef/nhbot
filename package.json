@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Hackerjef/nhbot#readme",
   "dependencies": {
     "bufferutil": "^3.0.3",
+    "clear": "0.0.1",
     "commander": "^2.11.0",
     "discord.js": "^11.1.0",
     "erlpack": "github:discordapp/erlpack",
