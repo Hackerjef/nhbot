@@ -1,13 +1,7 @@
-const simpleGit = require('simple-git')(__dirname);
-// update checker
-var updateconfig  = require("./config/updater.json")
-
-
 // clear screem for menu
 var clear = require("clear");
 clear();
 
-const { fork } = require("child_process");
 // arguments
 var program = require("commander");
 program
@@ -18,7 +12,6 @@ program
 // cli
 const vorpal = require("vorpal")();
 vorpal.localStorage("storage");
-
 vorpal
   .delimiter("$")
   .show();
@@ -49,6 +42,13 @@ vorpal
   });
 
 vorpal
+  .command("restart", "restarts everything")
+  .action(function(args, callback) {
+    power("restart");
+    callback();
+  });
+
+vorpal
   .command("update <subcommand>", "check for updates/installs updates")
   .action(function(args, callback) {
     if (args === "check") {
@@ -60,13 +60,12 @@ vorpal
     }
     callback();
   });
+// check if command line
+if (program.update) startup("updatedontstart");
+if (program.startupdate) startup("startupdate");
 
-
-
-if (program.update)vorpal.log("not ready yet");
-if (program.startupdate)vorpal.log("not ready yet");
-
-
+//startbot on startup
+const { fork } = require("child_process");
 const forked = fork("bot.js");
 vorpal.localStorage.setItem("botstart", "1");
 vorpal.pipe(forked.stdout);
@@ -75,12 +74,12 @@ forked.on("message", (msg) => {
   vorpal.log("Bot:", msg);
 });
 
-
 // functions
 function start() {
   if (vorpal.localStorage.getItem("botstart") == "1") vorpal.log("Bot already started");
   if (vorpal.localStorage.getItem("botstart") == "1") return;
   const forked = fork("bot.js");
+  vorpal.localStorage.setItem("botstart", "1");
   vorpal.pipe(forked.stdout);
   vorpal.pipe(forked.stderr);
   forked.on("message", (msg) => {
@@ -94,10 +93,40 @@ function stop() {
 }
 
 function update() {
-
+// idk
 }
 
 function updatecheck() {
-  simpleGit.fetch();
+//idk yet
+}
 
+//startup function
+function startup(option) {
+  if (option == "updatedontstart") {
+    if ( updatecheck() ) {
+      update();
+    }
+    vorpal.log("told to check and update and then shutdown");
+    vorpal.log("kden done  ;-)");
+    power("shutdown");
+  }
+
+  if (option == "updatestart") {
+    if ( updatecheck() ) {
+      update();
+      power("restart");
+    }
+  }
+}
+
+// power function (for shutdown and restart)
+function power(option) {
+  if (option == "shutdown") {
+    if (vorpal.localStorage.getItem("botstart") == "1") stop();
+    process.exit(0);
+  }
+  if (option == "restart") {
+    if (vorpal.localStorage.getItem("botstart") == "1") stop();
+    //idk?
+  }
 }
