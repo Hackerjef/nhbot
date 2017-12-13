@@ -52,9 +52,9 @@ vorpal
   .command("update <subcommand>", "check for updates/installs updates")
   .action(function(args, callback) {
     if (args === "check") {
-      updatecheck();
+      update("check");
     } else if (args === "update") {
-      update();
+      update("update");
     } else {
       vorpal.log("need to add sub command");
     }
@@ -74,7 +74,11 @@ forked.on("message", (msg) => {
   vorpal.log("Bot:", msg);
 });
 
-// functions
+
+//fuckton of functions
+
+
+// botstart function
 function start() {
   if (vorpal.localStorage.getItem("botstart") == "1") vorpal.log("Bot already started");
   if (vorpal.localStorage.getItem("botstart") == "1") return;
@@ -86,47 +90,51 @@ function start() {
     vorpal.log("Bot:", msg);
   });
 }
-
+//botstop function
 function stop() {
   forked.kill("SIGINT");
   vorpal.localStorage.setItem("botstart", "0");
 }
-
-function update() {
-// idk
+//update function
+function update(option) {
+  if (option == "check") {
+    // get local commit value
+    var localcommit = require('child_process').execSync('git rev-parse HEAD').toString().trim()
+    //get remote commit
+    var remotecommit = require('child_process').execSync('git ls-remote https://github.com/Hackerjef/nhbot.git HEAD').toString().trim().replace("\tHEAD", "")
+    //return true to allow update
+    if (localcommit === remotecommit) return true
+    return false
+  }
+  if (option == "update ") {
+    // do update
+  }
 }
-
-function updatecheck() {
-//idk yet
-}
-
 //startup function
 function startup(option) {
   if (option == "updatedontstart") {
-    if ( updatecheck() ) {
-      update();
+    if ( update("check") ) {
+      update("update");
     }
     vorpal.log("told to check and update and then shutdown");
     vorpal.log("kden done  ;-)");
     power("shutdown");
   }
-
   if (option == "updatestart") {
-    if ( updatecheck() ) {
-      update();
+    if ( update("check") ) {
+      update("update");
       power("restart");
     }
   }
 }
-
-// power function (for shutdown and restart)
+// power function
 function power(option) {
   if (option == "shutdown") {
     if (vorpal.localStorage.getItem("botstart") == "1") stop();
     process.exit(0);
-  }
+  };
   if (option == "restart") {
     if (vorpal.localStorage.getItem("botstart") == "1") stop();
-    //idk?
+    //restartbot somehow
   }
 }

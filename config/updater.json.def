@@ -2,7 +2,4 @@
   "enabled": "True",
   "startupasktoupdate": "false",
   "startupautoupdate": "false",
-  "githubuser": "hackerjef",
-  "githubrepo": "nhbot",
-  "githubbranch": "master"
 }
